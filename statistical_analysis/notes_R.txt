@@ -1,0 +1,392 @@
+
+
+############################
+# Resources for learning R #
+############################
+# https://stats.stackexchange.com/questions/138/free-resources-for-learning-r
+
+
+##################
+# R Cheat Sheets #
+##################
+# https://www.rstudio.com/resources/cheatsheets/
+
+###########################
+# RStudio on Ubuntu 20.04 #
+###########################
+# https://computingforgeeks.com/how-to-install-r-and-rstudio-on-ubuntu-debian-mint/
+
+######## Step 1: Update system
+# Like always, update system package index, and optionally upgrade all 
+# installed packages to latest.
+
+sudo apt update
+sudo apt -y upgrade
+
+######## Step 2: Install R on Ubuntu 22.04/20.04/18.04
+# We need to install r-base package which contains the basic R functions that 
+# let you perform arithmetic operations and basic programming in R. 
+
+sudo apt -y install r-base
+
+######## Step 3: Download and Install RStudio on Ubuntu 22.04/20.04/18.04
+# Now visit the  RStudio downloads page to grab the latest release of RStudio 
+# for Debian based Linux distributions.
+
+wget https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2021.09.1-372-amd64.deb
+sudo apt install -f ./rstudio-2021.09.1-372-amd64.deb
+# or
+# =>   https://www.rstudio.com/products/rstudio/download/#download
+
+######## Step 4: Launch RStudio on Ubuntu 22.04/20.04/18.04
+# Launch RStudio from Applications search section of your Desktop Environment 
+# or from the terminal.
+
+rstudio
+
+
+
+R 
+######################################################################### ggpubr
+install.packages("ggpubr")
+# => 
+Warning messages:
+1: In install.packages("ggpubr") :
+  installation of package ‘nloptr’ had non-zero exit status
+2: In install.packages("ggpubr") :
+  installation of package ‘lme4’ had non-zero exit status
+3: In install.packages("ggpubr") :
+  installation of package ‘pbkrtest’ had non-zero exit status
+4: In install.packages("ggpubr") :
+  installation of package ‘car’ had non-zero exit status
+5: In install.packages("ggpubr") :
+  installation of package ‘rstatix’ had non-zero exit status
+6: In install.packages("ggpubr") :
+  installation of package ‘ggpubr’ had non-zero exit status
+
+# Same error with:
+# install.packages("ggpubr", repos = "https://cloud.r-project.org/", dependencies = TRUE)
+# Same error with:
+# install.packages("ggpubr", repos = "http://cran.rstudio.com/", dependencies = TRUE)
+
+# Idea: Is the problem maybe the "conda activate" environment??? ################################################## Look into!
+
+# => https://stackoverflow.com/questions/62357732/installation-issues-of-ggpubr ################################################## Look into!
+# => 
+sudo apt-get install libcurl4-openssl-dev
+
+sudo apt install libnlopt-dev
+
+
+
+# Atom-R: Can not load or install ggpubr
+# RStudio-R: Can not load or install ggpubr
+# Terminal-Shell-R: No problems!
+
+
+    ########################################################################
+    # INSTALLATION AND SETUP OF R AND PYTHON IN ATOM VIA ANACONDAS JUPYTER #
+    ########################################################################
+
+################################################################################
+#                                                                              #
+#    ######################################################################    #
+#    #                                 R                                  #    #
+#    ######################################################################    #
+#                                                                              #
+################################################################################
+
+######## Install ###############################################################
+# https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/
+# The R packages included in the default Ubuntu repositories are often outdated.
+# We’ll install R from the CRAN repository. [Otherwise: sudo apt install r-base]
+
+# Install the dependencies necessary to add a new repository over HTTPS:
+sudo apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common
+
+# Add the CRAN repository to your system sources’ list:
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
+
+# Install R by typing:
+sudo apt install r-base
+
+# The installation may take a few minutes to complete. 
+# Once completed, verify it by printing the R version:
+R --version
+	# => #
+	# R version 4.0.1 (2020-06-06) -- "See Things Now"
+	# Copyright (C) 2020 The R Foundation for Statistical Computing
+	# Platform: x86_64-pc-linux-gnu (64-bit)
+	# ...
+	
+######## Packages ##############################################################
+# From inside the R-shell (which is opened in Terminal by typing: R
+install.packages("tidyverse")	# Tidy data => tidy analysis (Long install)
+install.packages("patchwork")	# Fancy arranging of plots
+install.packages("dplyr")			# ?
+install.packages("ggplot2")		# Tidy plots
+install.packages("gapminder")	# Dataset to explore R functions
+# => # WARNING: 'lib = "/usr/local/lib/R/site-library"' is not writable
+# => # => # Personal library: ~/R/x86_64-pc-linux-gnu-library/4.1
+
+
+######## Setup #################################################################
+# A macro for the pipe "%>%"
+
+######## Uninstall (clean) #####################################################
+# https://stackoverflow.com/questions/24118558/complete-remove-and-reinstall-r-including-all-packages
+# In R, you can use the .libPaths() instruction 
+# (or R -e '.libPaths()' in terminal) to know where your packages are installed.
+R -e '.libPaths()'
+# Delete those folders and reinstall.
+sudo apt-get remove r-base-core
+sudo apt-get remove r-base
+sudo apt-get autoremove
+
+
+################################################################################
+#                                                                              #
+#    ######################################################################    #
+#    #                                ATOM                                #    #
+#    ######################################################################    #
+#                                                                              #
+################################################################################
+
+######## Install ###############################################################
+# https://linuxize.com/post/how-to-install-atom-text-editor-on-ubuntu-20-04/
+# Update the packages list and install the dependencies:
+sudo apt update
+sudo apt install software-properties-common apt-transport-https wget
+
+#Import the repository GPG key and enable the Apt repository :
+wget -q https://packagecloud.io/AtomEditor/atom/gpgkey -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main"
+
+#Once the repository is enabled, install the latest version of Atom:
+sudo apt install atom
+
+######## Packages ##############################################################
+# https://wpdatatables.com/best-atom-packages/
+# TODO-Show
+# Minimap (by atom-minimap)
+# Color Picker
+# Pigments (by abe33)
+# Git-Plus package
+# git-time-machine
+
+######## Setup #################################################################
+
+
+######## Uninstall (clean) #####################################################
+# https://github.com/atom/atom/issues/2195#issuecomment-42917489
+# Assuming your OS is Ubuntu and you installed the latest build of atom by 
+# building from source, to remove the application itself:
+rm /usr/local/bin/atom
+
+# The following commands remove the folder you git cloned the repo, the atom 
+# config files, and the atom-shell config files respectively.
+rm -rf ~/atom
+rm -rf ~/.atom
+rm -rf ~/.config/Atom-Shell
+
+# And if you happened to use a dock (unity, plank, and so on) you may need to 
+# remove the atom.desktop file.
+rm ~/.local/share/applications/atom.desktop
+
+# Any dependencies you installed to build and run atom (for example node.js) 
+# will still be on your system. I don't know if the above code removes 
+# everything Atom related, but it should be at least the majority.
+
+
+################################################################################
+#                                                                              #
+#    ######################################################################    #
+#    #                        ANACONDA (JUPYTER)                          #    #
+#    ######################################################################    #
+#                                                                              #
+################################################################################
+
+######## Install ###############################################################
+
+######## Packages ##############################################################
+
+######## Setup #################################################################
+
+
+
+################################################################################
+#                                                                              #
+#    ######################################################################    #
+#    #                               PYTHON                               #    #
+#    ######################################################################    #
+#                                                                              #
+################################################################################
+
+######## Install ###############################################################
+# https://docs.anaconda.com/anaconda/install/linux/
+
+######## Packages ##############################################################
+
+######## Setup #################################################################
+
+
+
+################################################################################
+#                                                                              #
+#    ######################################################################    #
+#    #                       CONNECT THEM ALL                             #    #
+#    ######################################################################    #
+#                                                                              #
+################################################################################
+# 
+
+
+
+# First setup like this:
+sudo apt install r-base
+sudo apt install libxml2-dev libcurl4-openssl-dev libssl-dev
+conda install pylsp
+
+conda install numpy pandas seaborn scikit-learn requests
+conda install ipython ipykernel python-language-server
+conda install r-essentials r-igraph
+Rscript -e 'install.packages("languageserver")'
+python3 -m ipykernel install --user
+apm install hydrogen
+conda install ipykernel
+python -m ipykernel install  
+python3 -m ipykernel install  
+install.packages('IRkernel')
+R
+( ?????????? )
+sudo apt install libzmq3-dev libcurl4-openssl-dev libssl-dev jupyter-core jupyter-client
+R
+( ?????????? )
+hydrogen --version
+R
+( ?????????? )
+
+
+
+
+# Atom Packages:
+atom-ide-base
+atom-ide-code-format
+atom-ide-datatip
+atom-ide-definitions
+atom-ide-hyperclick
+atom-ide-markdown-service
+atom-ide-outline
+atom-ide-signature-help
+atom-ide-ui
+atom-language-r
+busy-signal
+hydrogen-launcher
+ide-python
+ide-r
+intentions
+language-latex
+latex
+linter
+linter-ui-default
+pdf-view
+platform-ide-terminal
+
+
+
+
+# I got:
+platformio-ide-terminal
+hydrogen
+hydrogen-launcher
+atom-ide-ui
+ide-python
+ide-r
+language-r
+# =>
+# Failed to load snippets from '/home/christianschuler/.atom/packages/language-r/snippets/language-r.cson'
+# /home/christianschuler/.atom/packages/language-r/snippets/language-r.cson: Duplicate key 'Cummulative max'
+
+# => atom-language-r
+
+# => atom-ide-base
+# => # Installing atom-ide-markdown-service, atom-ide-datatip, atom-ide-signature-help, atom-ide-hyperclick, atom-ide-definitions, atom-ide-outline, atom-ide-code-format, linter, linter-ui-default, intentions
+
+# => # Choose a linter UI
+# You have both linter and atom-ide-diagnostics enabled, which will both display lint results for Linter-based packages.
+# To avoid duplicate results, please disable one of the packages.
+
+
+
+
+# Error inside of Atom:
+library(ggpubr)
+# => Error in library(ggpubr): there is no package called ‘ggpubr’
+#    Traceback:
+#    1. library(ggpubr)
+
+#################################
+# The magical world of PACKAGES #
+#################################
+# [Jan 10]
+# RStudio => running script => Error in library(ggpubr) : there is no package called ‘ggpubr’
+# => Console: 
+install.packages("ggpubr")
+# => Many dependency errors like:
+#   ERROR: dependency ‘rstatix’ is not available for package ‘ggpubr’
+#   * removing ‘/home/christianschuler/environments/anaconda3/lib/R/library/ggpubr’
+#   Warning in install.packages :
+#     installation of package ‘ggpubr’ had non-zero exit status
+#
+# *going crazy*
+# RStudio, R-Shell and Atom seem to be using completely different instances of "R"?!
+# R-Shell: ggpubr is installed.
+# RStudio: ggpubr is not installed and can not be installed. (But yesterday it was still working . . .)
+# Atom: ggpubr is not installed. (But was at some point...)
+#
+# => conda activate => rstudio =>
+install.packages("ggpubr")
+# => Very long "installation"-process and many checks until it ends the same way...
+
+
+
+################################################################################
+http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization
+
+
+
+# WORK THROUGH THE FUNDAMENTALS FIRST, PLEASE!
+⇒ RIGHT INTO TRANSFORMATIONS!
+
+[https://www.sharpsightlabs.com/blog/mutate-in-r/](https://www.sharpsightlabs.com/blog/mutate-in-r/)
+
+⇒ [https://r4ds.had.co.nz/transform.htmlhttps://r4ds.had.co.nz/transform.html](https://r4ds.had.co.nz/transform.html)
+
+## Tutorial for R (basics quick and easy)
+
+[http://www.sthda.com/english/wiki/r-basics-quick-and-easy]
+(http://www.sthda.com/english/wiki/r-basics-quick-and-easy)
+
+## Tutorial for comparing multiple means in R (thanks Freddy!)
+
+[https://www.datanovia.com/en/courses/comparing-multiple-means-in-r/]
+(https://www.datanovia.com/en/courses/comparing-multiple-means-in-r/)
+
+## Datadcamp Tutorial FREE
+
+[https://app.datacamp.com/learn/courses/free-introduction-to-r](https://app.datacamp.com/learn/courses/free-introduction-to-r)
+
+## Introduction to the Tidyverse (?) Only first chapter free?
+
+[https://www.datacamp.com/courses/introduction-to-the-tidyverse?irclickid=zpJyHxwZsxyIU%3AxSV8yN1RxiUkG2TaQhBxKNzM0&irgwc=1](https://www.datacamp.com/courses/introduction-to-the-tidyverse?irclickid=zpJyHxwZsxyIU%3AxSV8yN1RxiUkG2TaQhBxKNzM0&irgwc=1) 
+
+## Tutorial for Beginners
+
+[https://www.statmethods.net/r-tutorial/index.html](https://www.statmethods.net/r-tutorial/index.html)
+
+## Setup for R and Python in Atom using Jupyter
+
+## RStudio ?
+
+[https://www.rstudio.com/](https://www.rstudio.com/)

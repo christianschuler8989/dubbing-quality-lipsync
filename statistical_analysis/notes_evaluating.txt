@@ -1,0 +1,184 @@
+
+
+##########
+# TO-DOs #
+##########
+
+# Data cleaning(?)
+# => # Runtime < 18.000 (18 seconds) indicates, that not even all the excerpts have been watched
+# => # All 6 ratings == 0 indicates, that no grading took place at all
+ 
+
+# Same subject multiple sessions:
+# => # Repeating of trials and therefore multiple ratings for same trial by same subject
+# => # => # Data being scewed in favour of this subjects preferences
+# => # => # How to clean this?
+#		If rare case: Manually by merging different results into a single file
+		If more common: Script for merging? Let some data fall off?
+
+# Script has to handle "UserLanguage" (and other missing inputs) propperly!
+
+# R vs Atom-R: Package-Madness 
+# => # How to "install.packages("patchwork")"  inside of Atom-R ???
+# => # https://stackoverflow.com/questions/16758129/error-in-loadnamespacename-there-is-no-package-called-rcpp
+# => # https://www.r-bloggers.com/2010/11/installing-r-packages/
+
+
+
+
+
+############################################
+# Interesting observations to follow up on # (dec. 14)
+############################################
+# Objects:
+w > a > p
+
+# Modifications:
+iL <<< uR < vR < everything else
+# => RANK:
+iL <<< uR < everything else
+
+# Attributes:
+0 > 1 > 2 > 3 > 5 > 4&6
+
+# Combinations where an increase in attribute leads to increase in grade
+Anfang-a : aL 3&4
+Anfang-p : vL 2 , aR 2
+Europaeisch-a : aL 2 , aR 4 , vL 3&4 , vR 2
+Europaeisch-p : aR 3 , vR 2
+Impfangebot-w : aR 3&4 , uL 2&3 , vL 3
+Paar-a : aL 3 , aR 3&4 , iR 3 , uL 3 , vL 2&3 
+Paar-p : aL 3 , iR 2
+Paar-w : aR 6 , uL 3 , vL 3 , vR 6
+Tempo-a : aL 3 , aR 4 , uL 2 , vL 2
+Pandemie-p : uL 2 , vR 2
+Tempo-p : aR 4 , uL 3
+Tempo-w : aL 6 , uL 2
+
+# => RANK:
+Anfang-a : vL 1&2 , aL 3&4 , aR 4
+Anfang-p : aR 2 , vL 6
+Europaeisch-a : aL 2 , vL 4
+Impfangebot-w : uL 3 , vL 3
+Paar-a : aL 2 , aR 3&4&5 , vL 2 
+Paar-p : aL 2&3 , iR 2 
+Paar-w : vL 3 , uL 3
+Tempo-a : uL 2 , vL 2
+Pandemie-p : uL 2 , vR 2
+Tempo-w : aL 3 , uL 2
+Zusammen-a : aR 5&6 , vL 2&3
+
+# Specific (and more than 2) RANK:
+Anfang-a : aL 3&4
+
+
+
+
+##############################################
+# Wat? Wat are we even looking at here- huh? #
+##############################################
+Threshold for noticeable disruption of Lip-Synchrony of <p>
+Same for <a> and <p:> to a lesser degree (For comparison)
+
+# Columns represent variables
+# Rows represent observations
+# Row-Names should be unique
+
+
+
+
+#####################
+# Fun with Phonemes #
+#####################
+# https://en.wikipedia.org/wiki/German_orthography
+#
+# https://en.wikipedia.org/wiki/Standard_German_phonology
+
+We call "r" an "Uvular Liquid Consonant", at least in the Standard German Phonology!
+=> In Russian (and others) it is a "Dental"
+=> In English (and others) it is an "Alveolar"
+=> In Catalan (and others) it is a "Post-alveolar" . . . . . . . . . . . . . . . . .
+And here I was wondering, why there are no propper "norms" and stuff for science and research in dubbing-
+Of course they can't exist, if the whole language-department is still such a complete clusterfuck!
+
+
+
+https://en.wikipedia.org/wiki/Standard_German_phonology																				
+C	a	m	a	n	f	a										Labial Nasal Consonant		Alveolar Nasal Consonant	Labial Fricative Fortis Consonant	
+OY	r	o	p	E:	I	S									Uvular Liquid Consonant		Labial Plosive Fortis Consonant			s = Alveolar Fricative Fortis
+?	aI	n	<p:>	a:	r	h														
+d	e:	6	p	a	n	d														
+			all																	
+6	<p:>	d	a	s	t	E														
+t	E	m	p	o	v	I														
+m	e:	6	<p:>	d	a	s														
+
+
+
+##############
+# Heuristics #
+##############
+
+# Length of phoneme
+/m/ and /a/ longer than /p/
+
+# Position/neighbour of phoneme
+/p/ in front of /a/ vs. right behind /a/
+
+# Neighbours as a group
+The modifications happened based on the phonemes surrounding the target-phoneme
+A few long ones vs. many short ones
+
+# What is being delayed
+Audio before visual vs. visual before audio
+
+
+
+###########
+# Metrics #
+###########
+
+# Cohens Kappa (?)
+
+
+############################
+# Statistical significance #
+############################
+"In general: 4-40 (absolute minimum up to no added value above 40)"
+
+##########################
+# Statistical Tests in R #
+##########################
+https://www.machinelearningplus.com/statistics/statistical-significance-tests-r/
+
+
+
+########################################
+# Biases and inconsistencies in rating #
+########################################
+
+
+# Janowski et al.
+
+# Li et al.
+
+
+############
+# Material #
+############
+Working with "television-quality web-streamed data"
+
+##################
+# Terms 'n stuff #
+##################
+# Subjective videoquality tests are psychophysical experiments
+
+# SRCs ("Sources" i.e. original video sequences)
+# HRCs ("Hypothetical Reference Circuits")
+# PVSs ("Processed Video Sequences")
+=> "SRCs are treated with HRCs to generate PVSs"
+
+"All possible combinations of HRCs should be evaluated"
+
+
+

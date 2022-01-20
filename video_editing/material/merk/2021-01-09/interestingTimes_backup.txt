@@ -1,0 +1,55 @@
+# For the p
+Anfang 157.8 160.8 3
+Europaeisch 204 208 4
+Paar 174 177 3
+Pandemie 14.2 17.2 3
+Tempo 178.5 181.5 3
+
+# For the a
+Anfang 157.8 160.8 3
+Europaeisch 204 208 4
+Paar 174 177 3
+Pandemie 14.2 17.2 3
+Zusammen 225.5 229.5 4
+Tempo 178.5 181.5 3
+
+# For the w
+Paar 174 177 3
+Impfangebot 191.2 195.2 4
+Tempo 178.5 181.5 3
+
+
+
+
+# ??????
+Ziel 63.0 65.0 2 
+Hoffnung 153.0 158.0 5 
+Weihnachten 160.0 164.0 4 
+Start 173.0 175.0 2 
+Tempo 179.0 181.0 2 
+
+# ???????
+Ziel 63.0 65.0 2 
+Hoffnung 153.0 158.0 5 
+Weihnachten 160.0 164.0 4 
+Start 173.0 175.0 2 
+Tempo 179.0 181.0 2 
+
+# Looking for p
+europaeische 17.0 20.0 3
+pflegepersonal 38.0 41.0 3
+stoppen 93.0 96.0 3
+politisch 109.0 112.0 3
+persoenliche 113.0 116.0 3
+natEuropaeisch 205.0 208.0 3
+europaeischerWeg 210.0 213.0 3
+
+# Looking for p and a
+Anfang 157.8 160.8 3
+Impfangebot 191.2 195.2 4
+Zusammen 225.5 229.5 4
+Tempo 178.5 181.5 3
+Pandemie 14.2 17.2 3
+Paar 174 177 3
+Europaeisch 204 208 4
+

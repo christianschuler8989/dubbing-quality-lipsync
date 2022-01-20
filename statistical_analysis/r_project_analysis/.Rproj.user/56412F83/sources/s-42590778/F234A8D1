@@ -1,0 +1,26 @@
+{
+    "id": "F234A8D1",
+    "path": "~/thesis_october/evaluating/r_project_analysis/r_anova_twoway.R",
+    "project_path": "r_anova_twoway.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1641893870344.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "136,9",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1641903050,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1641903050555,
+    "read_only": false,
+    "read_only_alternatives": []
+}

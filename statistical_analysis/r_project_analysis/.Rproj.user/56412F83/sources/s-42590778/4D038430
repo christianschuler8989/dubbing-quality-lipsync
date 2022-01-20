@@ -1,0 +1,26 @@
+{
+    "id": "4D038430",
+    "path": "~/thesis_october/evaluating/r_project_analysis/r_anova_oneway_object.R",
+    "project_path": "r_anova_oneway_object.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1642063062736.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "10,20",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1641899846,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1641899846,
+    "read_only": false,
+    "read_only_alternatives": []
+}

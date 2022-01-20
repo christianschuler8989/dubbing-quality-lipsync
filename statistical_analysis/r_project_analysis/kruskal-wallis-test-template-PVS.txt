@@ -1,0 +1,63 @@
+identifier = "ModAtt"
+sink_path <- paste0("kruskal-wallis/", identifier, ".txt")
+#### Kruskal-Wallis test  ######################################################
+#### Data preparation
+data <- data_done %>% dplyr::filter((Modification != "uR") & (Modification != "iL")) %>% # Excluding Mid- and Low- Anchors
+  select(Excerpt, Object, Modification, Attribute,
+         Grade, Rank, Runtime, SubjectName) %>%
+  mutate(ModAtt = paste0(Modification,Attribute))
+#### Summary statistics
+summary_statistics <- data %>% 
+  group_by(ModAtt) %>%
+  get_summary_stats(Rank, type = "common")
+sink(sink_path, append = FALSE)
+print("Summary Statistics")
+summary_statistics
+sink()
+#### Visualization
+ggboxplot(data, x = "ModAtt", y = "Rank", palette = "jco")
+#### Computation
+res.kruskal <- data %>% kruskal_test(Rank ~ ModAtt)
+sink(sink_path, append = TRUE)
+print("Kruskal Computation")
+res.kruskal
+sink()
+#### Effect size
+kruskal_effectsize <- data %>% kruskal_effsize(Rank ~ ModAtt)
+sink(sink_path, append = TRUE)
+print("Kruskal Effect Size")
+kruskal_effectsize
+sink()
+#### Multiple pairwise-comparisons
+#### Pairwise comparisons using Dunn’s test:
+pwc_dunn <- data %>% 
+  dunn_test(Rank ~ ModAtt, p.adjust.method = "bonferroni") 
+sink(sink_path, append = TRUE)
+print("Pairwise Comparisons Dunn Test")
+pwc_dunn
+sink()
+#### Pairwise comparisons using Wilcoxon’s test:
+pwc_wilcox <- data %>% 
+  wilcox_test(Rank ~ ModAtt, p.adjust.method = "bonferroni")
+sink(sink_path, append = TRUE)
+print("Pairwise Comparisons Wilcox Test")
+pwc_wilcox
+sink()
+#### Report
+# Visualization: box plots with p-values
+# For Dunn test
+pwc_dunn <- pwc_dunn %>% add_xy_position(x = ModAtt)
+ggboxplot(data, x = "ModAtt", y = "Rank") +
+  stat_pvalue_manual(pwc_dunn, hide.ns = TRUE) +
+  labs(
+    subtitle = get_test_label(res.kruskal, detailed = TRUE),
+    caption = get_pwc_label(pwc_dunn)
+  )
+# For Wilcox test
+pwc_wilcox <- pwc_wilcox %>% add_xy_position(x = ModAtt)
+ggboxplot(data, x = "ModAtt", y = "Rank") +
+  stat_pvalue_manual(pwc_wilcox, hide.ns = TRUE) +
+  labs(
+    subtitle = get_test_label(res.kruskal, detailed = TRUE),
+    caption = get_pwc_label(pwc_wilcox)
+  )

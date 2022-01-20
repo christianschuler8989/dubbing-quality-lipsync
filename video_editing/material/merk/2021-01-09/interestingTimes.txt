@@ -1,0 +1,3 @@
+Paar 174 177 3
+Impfangebot 191.2 195.2 4
+Tempo 178.5 181.5 3
