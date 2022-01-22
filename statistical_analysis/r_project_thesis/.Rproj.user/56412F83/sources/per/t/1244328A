@@ -1,0 +1,26 @@
+{
+    "id": "1244328A",
+    "path": "~/thesis_october/evaluating/r_project_thesis/.Rprofile",
+    "project_path": ".Rprofile",
+    "type": "r_source",
+    "hash": "990264886",
+    "contents": "",
+    "dirty": true,
+    "created": 1642830067543.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "27,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1642848873,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1642848878064,
+    "read_only": false,
+    "read_only_alternatives": []
+}

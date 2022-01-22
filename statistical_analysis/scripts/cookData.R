@@ -232,34 +232,6 @@ print(paste(
 ))
 
 
-######## Multiple ratings from one subject for the same Trial-ID ###############
-################################################################################
-# If one subject grades the same trial multiple times, the overall
-# rating-preference would be scewed towards this subjects preferences.
-# Only distinct gradings- every duplicate of the combination of "SubjectName"
-# and "TrialID" will be excluded.
-#### Maybe we have to work in the realm of "data.tables" now, since there was
-#     this ONE step, where we did it above . . .
-# https://stackoverflow.com/questions/2900510/r-equivalent-of-select-distinct-
-#   on-two-or-more-fields-variables/49051949
-setDT(data_cleaned_empty)
-data_cleaned_duplicates <- unique(
-  data_cleaned_empty,
-  by = c("SubjectName", "TrialID", "File")
-)
-# data_cleaned_duplicates <- data_cleaned_empty %>%
-#  distinct(SubjectName, TrialID, File, .keep_all = TRUE)
-
-write.csv(data_cleaned_duplicates, "data_cooked_medium.csv")
-print(paste(
-  "Rows of data (cleaned duplicates) COOKED_MEDIUM:",
-  nrow(data_cleaned_duplicates),
-  sep = " "
-))
-
-
-
-
 ######## Anonymization of subject names ########################################
 ################################################################################
 #
@@ -296,17 +268,48 @@ print(paste(
 ################################################################################
 # https://stackoverflow.com/questions/65091138/in-r-how-to-consistently-replace-anonimize-ids-or-names-within-two-separate
 # https://r-lang.com/r-substr/
-data_cleaned_anonymize <- data_cleaned_duplicates
+data_cleaned_anonymize <- data_cleaned_empty
 
 data_cleaned_anonymize$SubjectName <- sapply(data_cleaned_anonymize$SubjectName, digest::digest, algo = "md5")
 data_cleaned_anonymize$SubjectName <- paste0("UristMc", substr(data_cleaned_anonymize$SubjectName, start = 0, stop = 6))
 
-write.csv(data_cleaned_anonymize, "data_cooked_done.csv")
+write.csv(data_cleaned_anonymize, "data_cooked_medium.csv")
 print(paste(
-  "Rows of data (cleaned anonymized) COOKED_DONE:",
+  "Rows of data (cleaned anonymized) COOKED_MEDIUM:",
   nrow(data_cleaned_anonymize),
   sep = " "
 ))
+
+
+
+
+
+
+######## Multiple ratings from one subject for the same Trial-ID ###############
+################################################################################
+# If one subject grades the same trial multiple times, the overall
+# rating-preference would be scewed towards this subjects preferences.
+# Only distinct gradings- every duplicate of the combination of "SubjectName"
+# and "TrialID" will be excluded.
+#### Maybe we have to work in the realm of "data.tables" now, since there was
+#     this ONE step, where we did it above . . .
+# https://stackoverflow.com/questions/2900510/r-equivalent-of-select-distinct-
+#   on-two-or-more-fields-variables/49051949
+setDT(data_cleaned_anonymize)
+data_cleaned_duplicates <- unique(
+  data_cleaned_anonymize,
+  by = c("SubjectName", "TrialID", "File")
+)
+# data_cleaned_duplicates <- data_cleaned_empty %>%
+#  distinct(SubjectName, TrialID, File, .keep_all = TRUE)
+write.csv(data_cleaned_duplicates, "data_cooked_done.csv")
+print(paste(
+  "Rows of data (cleaned duplicates) COOKED_DONE:",
+  nrow(data_cleaned_duplicates),
+  sep = " "
+))
+
+
 
 
 # ????????????????????????????????????
