@@ -36,6 +36,7 @@ pdf_boolean <- TRUE
 png_boolean <- TRUE
 options(max.print=100000)
 options(dplyr.print_max = 100000)
+list_of_plots <- list()
 
 #### One-way ANOVA #############################################################
 ################################################################################
@@ -80,10 +81,10 @@ sink()
 model_grade <- lm(Grade ~ Object, data = data_anch)
 model_rank <- lm(Rank ~ Object, data = data_anch)
 # Create a QQ plot of residuals
-list_of_plots[[1]] <- ggqqplot(residuals(model_grade),
-                               main = "Check normality assumption by analyzing the model residuals for Grades")
-list_of_plots[[2]] <- ggqqplot(residuals(model_rank),
-                               main = "Check normality assumption by analyzing the model residuals for Rank")
+list_of_plots[[1]] <- ggqqplot(residuals(model_grade))#,
+                               #main = "Check normality assumption by analyzing the model residuals for Grades")
+list_of_plots[[2]] <- ggqqplot(residuals(model_rank))#,
+                               #main = "Check normality assumption by analyzing the model residuals for Rank")
 
 # Compute Shapiro-Wilk test of normality
 sink(sink_path, append = TRUE)
@@ -101,22 +102,22 @@ sink()
 #Create QQ plots for each group level:
 list_of_plots[[3]] <- ggqqplot(data_anch,
                                "Grade",
-                               facet.by = "Object",
-                               main = "Check normality assumption by groups for Grade")
+                               facet.by = "Object")#,
+                               #main = "Check normality assumption by groups for Grade")
 list_of_plots[[4]] <- ggqqplot(data_anch,
                                "Rank",
-                               facet.by = "Object",
-                               main = "Check normality assumption by groups for Rank")
+                               facet.by = "Object")#,
+                               #main = "Check normality assumption by groups for Rank")
 
 
 # Assumption 4 : Homogeneity of variances. The variance of the outcome   #
 #  variable should be equal in every cell of the design.                 #
 #### Homogeneity of variance assumption
 ## The residuals versus fits plot can be used to check the homogeneity of variances.
-list_of_plots[[5]] <- ggqqplot(model_grade, 1,
-                           main = "Check the homogeneity of variances for Grades")
-list_of_plots[[6]] <- ggqqplot(model_rank, 1,
-                           main = "Check the homogeneity of variances for Rank")
+list_of_plots[[5]] <- ggqqplot(model_grade, 1)#,
+                           #main = "Check the homogeneity of variances for Grades")
+list_of_plots[[6]] <- ggqqplot(model_rank, 1)#,
+                           #main = "Check the homogeneity of variances for Rank")
 
 ## It’s also possible to use the Levene’s test to check the homogeneity of variances:
 sink(sink_path, append = TRUE)

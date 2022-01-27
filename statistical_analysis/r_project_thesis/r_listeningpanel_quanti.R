@@ -5,6 +5,16 @@
 # Date: 2022 Jan
 ################################################################################
 
+# Total Runtime
+runtime_total <- sum(data_done$Runtime)/6 # In ms (/6 because 1 Trial = 6 Rows)
+runtime_total <- runtime_total / 1000     # In s
+runtime_total <- runtime_total / 60       # In m
+#runtime_total <- runtime_total / 60      # In h
+#runtime_total <- runtime_total / 24      # In d
+# Total runtime of entire study in minutes:
+runtime_total
+
+
 # Preparations:
 #options(dplyr.print_max = 100000)
 options(dplyr.print_max = 10)

@@ -17,157 +17,163 @@ subjectTrialNumberAll <- subjectTrialNumberAll[order(-subjectTrialNumberAll$Tria
 # 2 UristMcaae4cb        199
 
 
-listeningpanel_rank_anchors_detection <- function() {
-  #### Preperations
-  identifier <- "anchors"
-  sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
-  options(max.print = 100000)
-  options(dplyr.print_max = 100000)
-  
-  #### How well did they "find" the Anchors? #####################################
-  ################################################################################
-  data <- data_done %>% dplyr::filter(Attribute == 0) %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "High-Anchor"
-  data_rank_high <- data
-  #data <- data %>% select(Rank, Count, Percent) # For slicker sink in txt
-  sink(sink_path, append = FALSE)
-  print("High-Anchor - Attribute = 0")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 4) %>%
-    dplyr::filter(Modification == "uR") %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "Middle-Anchor"
-  data_rank_mid <- data
-  sink(sink_path, append = TRUE)
-  print("Middle-Anchor - Attribute = 4 and Modification = uR")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 4) %>%
-    dplyr::filter(Modification == "iL") %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "Low-Anchor"
-  data_rank_low <- data
-  sink(sink_path, append = TRUE)
-  print("Low-Anchor - Attribute = 4 and Modification = iL")
-  print(data)
-  sink()
-  
-  #### How well did they "find" the "order" of attributes? #######################
-  ################################################################################
-  data <- data_done %>% dplyr::filter(Attribute == 1) %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "1-Frame"
-  data_rank_01 <- data
-  sink(sink_path, append = TRUE)
-  print("Attribute = 1")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 2) %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "2-Frames"
-  data_rank_02 <- data
-  sink(sink_path, append = TRUE)
-  print("Attribute = 2")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 3) %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "3-Frames"
-  data_rank_03 <- data
-  sink(sink_path, append = TRUE)
-  print("Attribute = 3")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 4) %>%
-    dplyr::filter(Modification != "iL") %>%
-    dplyr::filter(Modification != "uR") %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "4-Frames"
-  data_rank_04 <- data
-  sink(sink_path, append = TRUE)
-  print("Attribute = 4")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 5) %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "5-Frames"
-  data_rank_05 <- data
-  sink(sink_path, append = TRUE)
-  print("Attribute = 5")
-  print(data)
-  sink()
-  
-  data <- data_done %>% dplyr::filter(Attribute == 6) %>%
-    group_by(Attribute, Rank) %>%
-    summarise(Count = n())
-  data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
-  data$identifier <- "6-Frames"
-  data_rank_06 <- data
-  sink(sink_path, append = TRUE)
-  print("Attribute = 6")
-  print(data)
-  sink()
-  
-  
-  ####################################################
-  #### This but depending on mod!!!/obj???/exc??? ####
-  ####################################################
-  data_anchors <- rbind(data_rank_high, data_rank_mid, data_rank_low)
-  data_items <- rbind(data_rank_01, data_rank_02, data_rank_03, data_rank_04, data_rank_05, data_rank_06)
-  data_combined <- rbind(data_anchors, data_items)
-  
-  
-  #### Facet-Plot of the Anchor-Detection tendencies
-  gg <- ggplot(data_combined, aes(x = Rank, y = Count, color = identifier)) +
-    geom_col() +
-    labs(title = "Scatterplot", x = "Rank", y = "Count")
-  #### Theme adding
-  gg1 <- gg + theme(plot.title = element_text(size = 30, face = "bold"),
-                    axis.text.x = element_text(size = 15),
-                    axis.text.y = element_text(size = 15),
-                    axis.title.x = element_text(size = 25),
-                    axis.title.y = element_text(size = 25)) +
-    scale_color_discrete((name = "Type of PVS")) +
-    scale_x_continuous(breaks = scales::pretty_breaks(n = 6))
-  
-  gg1 + facet_wrap( ~ identifier, ncol = 3)
-  png(
-    file = paste0("listeningpanel-quali/listening_panel_rank", identifier, ".png")
-  )
-  print(gg1)
-  dev.off()
-  
-  # MANUAL EXPORT REQUIRED:
-  # Bottom right click on "Export", 
-  #  navigate to the directory /listening-quali/ 
-  #  and save as listening-panel-rankanchors.png
-  
-}
+#listeningpanel_rank_anchors_detection <- function() {
+#### Preperations
+identifier <- "anchors"
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
+options(max.print = 100000)
+options(dplyr.print_max = 100000)
 
+#### How well did they "find" the Anchors? #####################################
+################################################################################
+data <- data_done %>% dplyr::filter(Attribute == 0) %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "High-Anchor"
+data_rank_high <- data
+#data <- data %>% select(Rank, Count, Percent) # For slicker sink in txt
+sink(sink_path, append = FALSE)
+print("High-Anchor - Attribute = 0")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 4) %>%
+  dplyr::filter(Modification == "uR") %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "Middle-Anchor"
+data_rank_mid <- data
+sink(sink_path, append = TRUE)
+print("Middle-Anchor - Attribute = 4 and Modification = uR")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 4) %>%
+  dplyr::filter(Modification == "iL") %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "Low-Anchor"
+data_rank_low <- data
+sink(sink_path, append = TRUE)
+print("Low-Anchor - Attribute = 4 and Modification = iL")
+print(data)
+sink()
+
+#### How well did they "find" the "order" of attributes? #######################
+################################################################################
+data <- data_done %>% dplyr::filter(Attribute == 1) %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "1-Frame"
+data_rank_01 <- data
+sink(sink_path, append = TRUE)
+print("Attribute = 1")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 2) %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "2-Frames"
+data_rank_02 <- data
+sink(sink_path, append = TRUE)
+print("Attribute = 2")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 3) %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "3-Frames"
+data_rank_03 <- data
+sink(sink_path, append = TRUE)
+print("Attribute = 3")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 4) %>%
+  dplyr::filter(Modification != "iL") %>%
+  dplyr::filter(Modification != "uR") %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "4-Frames"
+data_rank_04 <- data
+sink(sink_path, append = TRUE)
+print("Attribute = 4")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 5) %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "5-Frames"
+data_rank_05 <- data
+sink(sink_path, append = TRUE)
+print("Attribute = 5")
+print(data)
+sink()
+
+data <- data_done %>% dplyr::filter(Attribute == 6) %>%
+  group_by(Attribute, Rank) %>%
+  summarise(Count = n())
+data$Percent <- paste(round(data$Count / sum(data$Count) * 100, 2), "%")
+data$identifier <- "6-Frames"
+data_rank_06 <- data
+sink(sink_path, append = TRUE)
+print("Attribute = 6")
+print(data)
+sink()
+
+
+####################################################
+#### This but depending on mod!!!/obj???/exc??? ####
+####################################################
+data_anchors <- rbind(data_rank_high, data_rank_mid, data_rank_low)
+data_items <- rbind(data_rank_01, data_rank_02, data_rank_03, data_rank_04, data_rank_05, data_rank_06)
+data_combined <- rbind(data_anchors, data_items)
+
+
+#### Facet-Plot of the Anchor-Detection tendencies
+gg <- ggplot(data_combined, aes(x = Rank, y = Count, color = identifier)) +
+  geom_col() +
+  labs(x = "Rank", y = "Count")
+#### Theme adding
+gg1 <- gg + theme(plot.title = element_text(size = 30, face = "bold"),
+                  axis.text.x = element_text(size = 15),
+                  axis.text.y = element_text(size = 15),
+                  axis.title.x = element_text(size = 25),
+                  axis.title.y = element_text(size = 25)) +
+  scale_color_discrete((name = "Type of PVS")) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 6))
+
+gg1 + facet_wrap( ~ identifier, ncol = 3)
+
+
+gg1
+
+
+png(
+  file = paste0("listeningpanel-quali/listening_panel_rank", identifier, ".png")
+)
+print(gg1)
+dev.off()
+
+# MANUAL EXPORT REQUIRED:
+# Bottom right click on "Export", 
+#  navigate to the directory /listening-quali/ 
+#  and save as listening-panel-rankanchors.png
+
+#}
+# This is supposed to work as a function, but does not work for this one plot
+# => Manual labour!
 
 
 # [TODO:] Function call results in stupid labels in plot... Learn how to R!
@@ -439,7 +445,7 @@ anchors_tendency_listeningpanel <- function(png_boolean) {
 
 main <- function() {
   png_boolean <- TRUE
-  #listeningpanel_rank_anchors_detection()
+  listeningpanel_rank_anchors_detection()
   anchors_tendency_listeningpanel(png_boolean)
   
 }

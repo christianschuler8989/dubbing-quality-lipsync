@@ -34,9 +34,9 @@ kruskall_object <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -163,9 +163,9 @@ kruskall_excerpt <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -292,9 +292,9 @@ kruskall_modification <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -421,9 +421,9 @@ kruskall_attribute <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -550,9 +550,9 @@ kruskall_subjectSex <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -688,9 +688,9 @@ kruskall_subjectEyesight <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -821,9 +821,9 @@ kruskall_subjectLanguage <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -951,9 +951,9 @@ kruskall_subjectInterest <- function() {
     get_summary_stats(Rank, type = "common")
   
   sink(sink_path, append = FALSE)
-  print("Summary Statistics fo Grade")
+  print("Summary Statistics for Grade")
   print(summary_statistics_grade)
-  print("Summary Statistics fo Rank")
+  print("Summary Statistics for Rank")
   print(summary_statistics_rank)
   sink()
   
@@ -1056,6 +1056,284 @@ kruskall_subjectInterest <- function() {
 
 ################################################################################
 
+kruskall_audioVisual <- function() {
+  #### Output preparation
+  identifier <- "AudioVisual"
+  sink_path <- paste0("kruskalwallis/", identifier, "-sink.txt")
+  pdf_boolean <- TRUE
+  png_boolean <- TRUE
+  options(max.print=100000)
+  options(dplyr.print_max = 100000)
+  
+  #### Kruskal-Wallis test  ######################################################
+  #### Data preparation
+  data <- data_done %>% 
+    dplyr::filter((Modification != "uR") & (Modification != "iL")) %>% # Excluding Mid- and Low- Anchors
+    select(Excerpt, Object, Modification, Attribute,
+           Grade, Rank, Runtime)
+  data <- data %>% mutate(AudioVisual = case_when(
+    Modification == "aL" | Modification == "aR" ~ "audio",
+    Modification == "vL" | Modification == "vR" ~ "visual",
+    Modification == "iL" | Modification == "iR" ~ "mixed",
+    Modification == "uL" | Modification == "uR" ~ "multi"))
+  
+  #### Summary statistics
+  summary_statistics_grade <- data %>% 
+    group_by(AudioVisual) %>%
+    get_summary_stats(Grade, type = "common")
+  summary_statistics_rank <- data %>% 
+    group_by(AudioVisual) %>%
+    get_summary_stats(Rank, type = "common")
+  
+  sink(sink_path, append = FALSE)
+  print("Summary Statistics for Grade")
+  print(summary_statistics_grade)
+  print("Summary Statistics for Rank")
+  print(summary_statistics_rank)
+  sink()
+  
+  #### Visualization
+  ggboxplot(data, x = "AudioVisual", y = "Grade", palette = "jco")
+  ggboxplot(data, x = "AudioVisual", y = "Rank", palette = "jco")
+  
+  #### Computation
+  resGrade.kruskal <- data %>% kruskal_test(Grade ~ AudioVisual)
+  resRank.kruskal <- data %>% kruskal_test(Rank ~ AudioVisual)
+  sink(sink_path, append = TRUE)
+  print("######## Question: We want to know if there is any significant difference between the average ratings of items in the experimental conditions. ########")
+  print("######## Kruskal Computation for Grade ########")
+  print(resGrade.kruskal)
+  print("######## Kruskal Computation for Rank ########")
+  print(resRank.kruskal)
+  sink()
+  
+  #### Effect size
+  kruskal_effectsize_grade <- data %>% kruskal_effsize(Grade ~ AudioVisual)
+  kruskal_effectsize_rank <- data %>% kruskal_effsize(Rank ~ AudioVisual)
+  sink(sink_path, append = TRUE)
+  print("######## The eta squared, based on the H-statistic, can be used as the measure of the Kruskal-Wallis test effect size. ########")
+  print("######## It is calculated as follow : eta2[H] = (H - k + 1)/(n - k); where H is the value obtained in the Kruskal-Wallis test; ########")
+  print("######## k is the number of groups; n is the total number of observations (M. T. Tomczak and Tomczak 2014). ########")
+  print("######## The eta-squared estimate assumes values from 0 to 1 and multiplied by 100 indicates the percentage of variance in the dependent variable explained by the independent variable. ########")
+  print("######## The interpretation values commonly in published literature are: ########")
+  print("######## 0.01- < 0.06 (small effect), 0.06 - < 0.14 (moderate effect) and >= 0.14 (large effect). ########")
+  print("######## Kruskal Effect Size for Grade ########")
+  print(kruskal_effectsize_grade)
+  print("######## Kruskal Effect Size for Rank ########")
+  print(kruskal_effectsize_rank)
+  sink()
+  
+  #### Multiple pairwise-comparisons
+  #### Pairwise comparisons using Dunn’s test:
+  pwc_dunn_grade <- data %>% 
+    dunn_test(Grade ~ AudioVisual, p.adjust.method = "bonferroni") 
+  pwc_dunn_rank <- data %>% 
+    dunn_test(Rank ~ AudioVisual, p.adjust.method = "bonferroni") 
+  sink(sink_path, append = TRUE)
+  print("######## From the output of the Kruskal-Wallis test, we know that there is a significant difference between groups, but we don’t know which pairs of groups are different. ########")
+  print("######## A significant Kruskal-Wallis test is generally followed up by Dunn’s test to identify which groups are different. ########")
+  print("######## Compared to the Wilcoxon’s test, the Dunn’s test takes into account the rankings used by the Kruskal-Wallis test. It also does ties adjustments. ########")
+  print("######## Pairwise Comparisons Dunn Test for Grade ########")
+  print(pwc_dunn_grade)
+  print("######## Pairwise Comparisons Dunn Test for Rank ########")
+  print(pwc_dunn_rank)
+  sink()
+  
+  #### Pairwise comparisons using Wilcoxon’s test:
+  pwc_wilcox_grade <- data %>% 
+    wilcox_test(Grade ~ AudioVisual, p.adjust.method = "bonferroni")
+  pwc_wilcox_rank <- data %>% 
+    wilcox_test(Rank ~ AudioVisual, p.adjust.method = "bonferroni")
+  sink(sink_path, append = TRUE)
+  print("######## It’s also possible to use the Wilcoxon’s test to calculate pairwise comparisons between group levels with corrections for multiple testing. ########")
+  print("######## Pairwise Comparisons Wilcox Test for Grade ########")
+  print(pwc_wilcox_grade)
+  print("######## Pairwise Comparisons Wilcox Test for Rank ########")
+  print(pwc_wilcox_rank)
+  sink()
+  
+  #### Report
+  # Visualization: box plots with p-values
+  # For Dunn test
+  pwc_dunn_grade <- pwc_dunn_grade %>% add_xy_position(x = "AudioVisual")
+  plot_pwc_dunn_grade <- ggboxplot(data, x = "AudioVisual", y = "Grade") +
+    stat_pvalue_manual(pwc_dunn_grade, hide.ns = TRUE) +
+    labs(
+      subtitle = get_test_label(resGrade.kruskal, detailed = TRUE),
+      caption = get_pwc_label(pwc_dunn_grade)
+    )
+  # For Wilcox test
+  pwc_wilcox_grade <- pwc_wilcox_grade %>% add_xy_position(x = "AudioVisual")
+  plot_pwc_wilcox_grade <- ggboxplot(data, x = "AudioVisual", y = "Grade") +
+    stat_pvalue_manual(pwc_wilcox_grade, hide.ns = TRUE) +
+    labs(
+      subtitle = get_test_label(resGrade.kruskal, detailed = TRUE),
+      caption = get_pwc_label(pwc_wilcox_grade)
+    )
+  
+  # Saving data to pdf or png ##################################################
+  ##############################################################################
+  if (png_boolean == TRUE) { # Print plots to sequence of png files:
+    png(
+      file = paste0("kruskalwallis/", identifier, "-pwc-dunn.png"),
+    )
+    print(plot_pwc_dunn_grade)
+    dev.off()
+    png(
+      file = paste0("kruskalwallis/", identifier, "-pwc-wilcox.png"),
+    )
+    print(plot_pwc_wilcox_grade)
+    dev.off()
+  }
+}
+
+################################################################################
+
+################################################################################
+
+
+
+kruskall_modificationObject <- function() {
+  #### Output preparation
+  identifier <- "ModificationObject"
+  sink_path <- paste0("kruskalwallis/", identifier, "-sink.txt")
+  pdf_boolean <- TRUE
+  png_boolean <- TRUE
+  options(max.print=100000)
+  options(dplyr.print_max = 100000)
+  
+  #### Kruskal-Wallis test  ######################################################
+  #### Data preparation
+  data <- data_done %>% 
+    dplyr::filter((Modification != "uR") & (Modification != "iL")) %>% # Excluding Mid- and Low- Anchors
+    select(Excerpt, Object, Modification, Attribute,
+           Grade, Rank, Runtime)
+  #data <- data %>% mutate(AudioVisual = case_when(
+   # Modification == "aL" | Modification == "aR" ~ "audio",
+    #Modification == "vL" | Modification == "vR" ~ "visual",
+    #Modification == "iL" | Modification == "iR" ~ "mixed",
+    #Modification == "uL" | Modification == "uR" ~ "multi"))
+  
+  #data <- data %>% group_by(Modification, Object)
+  
+  data <- data %>% mutate(ModificationObject = paste0(data$Modification, data$Object))
+  
+  #### Summary statistics
+  summary_statistics_grade <- data %>% 
+    group_by(ModificationObject) %>%
+    get_summary_stats(Grade, type = "common")
+  summary_statistics_rank <- data %>% 
+    group_by(ModificationObject) %>%
+    get_summary_stats(Rank, type = "common")
+  
+  sink(sink_path, append = FALSE)
+  print("Summary Statistics for Grade")
+  print(summary_statistics_grade)
+  print("Summary Statistics for Rank")
+  print(summary_statistics_rank)
+  sink()
+  
+  #### Visualization
+  ggboxplot(data, x = "ModificationObject", y = "Grade", palette = "jco")
+  ggboxplot(data, x = "ModificationObject", y = "Rank", palette = "jco")
+  
+  #### Computation
+  resGrade.kruskal <- data %>% kruskal_test(Grade ~ ModificationObject)
+  resRank.kruskal <- data %>% kruskal_test(Rank ~ ModificationObject)
+  sink(sink_path, append = TRUE)
+  print("######## Question: We want to know if there is any significant difference between the average ratings of items in the experimental conditions. ########")
+  print("######## Kruskal Computation for Grade ########")
+  print(resGrade.kruskal)
+  print("######## Kruskal Computation for Rank ########")
+  print(resRank.kruskal)
+  sink()
+  
+  #### Effect size
+  kruskal_effectsize_grade <- data %>% kruskal_effsize(Grade ~ ModificationObject)
+  kruskal_effectsize_rank <- data %>% kruskal_effsize(Rank ~ ModificationObject)
+  sink(sink_path, append = TRUE)
+  print("######## The eta squared, based on the H-statistic, can be used as the measure of the Kruskal-Wallis test effect size. ########")
+  print("######## It is calculated as follow : eta2[H] = (H - k + 1)/(n - k); where H is the value obtained in the Kruskal-Wallis test; ########")
+  print("######## k is the number of groups; n is the total number of observations (M. T. Tomczak and Tomczak 2014). ########")
+  print("######## The eta-squared estimate assumes values from 0 to 1 and multiplied by 100 indicates the percentage of variance in the dependent variable explained by the independent variable. ########")
+  print("######## The interpretation values commonly in published literature are: ########")
+  print("######## 0.01- < 0.06 (small effect), 0.06 - < 0.14 (moderate effect) and >= 0.14 (large effect). ########")
+  print("######## Kruskal Effect Size for Grade ########")
+  print(kruskal_effectsize_grade)
+  print("######## Kruskal Effect Size for Rank ########")
+  print(kruskal_effectsize_rank)
+  sink()
+  
+  #### Multiple pairwise-comparisons
+  #### Pairwise comparisons using Dunn’s test:
+  pwc_dunn_grade <- data %>% 
+    dunn_test(Grade ~ ModificationObject, p.adjust.method = "bonferroni") 
+  pwc_dunn_rank <- data %>% 
+    dunn_test(Rank ~ ModificationObject, p.adjust.method = "bonferroni") 
+  sink(sink_path, append = TRUE)
+  print("######## From the output of the Kruskal-Wallis test, we know that there is a significant difference between groups, but we don’t know which pairs of groups are different. ########")
+  print("######## A significant Kruskal-Wallis test is generally followed up by Dunn’s test to identify which groups are different. ########")
+  print("######## Compared to the Wilcoxon’s test, the Dunn’s test takes into account the rankings used by the Kruskal-Wallis test. It also does ties adjustments. ########")
+  print("######## Pairwise Comparisons Dunn Test for Grade ########")
+  print(pwc_dunn_grade)
+  print("######## Pairwise Comparisons Dunn Test for Rank ########")
+  print(pwc_dunn_rank)
+  sink()
+  
+  #### Pairwise comparisons using Wilcoxon’s test:
+  pwc_wilcox_grade <- data %>% 
+    wilcox_test(Grade ~ ModificationObject, p.adjust.method = "bonferroni")
+  pwc_wilcox_rank <- data %>% 
+    wilcox_test(Rank ~ ModificationObject, p.adjust.method = "bonferroni")
+  sink(sink_path, append = TRUE)
+  print("######## It’s also possible to use the Wilcoxon’s test to calculate pairwise comparisons between group levels with corrections for multiple testing. ########")
+  print("######## Pairwise Comparisons Wilcox Test for Grade ########")
+  print(pwc_wilcox_grade)
+  print("######## Pairwise Comparisons Wilcox Test for Rank ########")
+  print(pwc_wilcox_rank)
+  sink()
+  
+  #### Report
+  # Visualization: box plots with p-values
+  # For Dunn test
+  pwc_dunn_grade <- pwc_dunn_grade %>% add_xy_position(x = "ModificationObject")
+  plot_pwc_dunn_grade <- ggboxplot(data, x = "ModificationObject", y = "Grade") +
+    stat_pvalue_manual(pwc_dunn_grade, hide.ns = TRUE) +
+    labs(
+      subtitle = get_test_label(resGrade.kruskal, detailed = TRUE),
+      caption = get_pwc_label(pwc_dunn_grade)
+    )
+  # For Wilcox test
+  pwc_wilcox_grade <- pwc_wilcox_grade %>% add_xy_position(x = "ModificationObject")
+  plot_pwc_wilcox_grade <- ggboxplot(data, x = "ModificationObject", y = "Grade") +
+    stat_pvalue_manual(pwc_wilcox_grade, hide.ns = TRUE) +
+    labs(
+      subtitle = get_test_label(resGrade.kruskal, detailed = TRUE),
+      caption = get_pwc_label(pwc_wilcox_grade)
+    )
+  
+  # Saving data to pdf or png ##################################################
+  ##############################################################################
+  if (png_boolean == TRUE) { # Print plots to sequence of png files:
+    png(
+      file = paste0("kruskalwallis/", identifier, "-pwc-dunn.png"),
+    )
+    print(plot_pwc_dunn_grade)
+    dev.off()
+    png(
+      file = paste0("kruskalwallis/", identifier, "-pwc-wilcox.png"),
+    )
+    print(plot_pwc_wilcox_grade)
+    dev.off()
+  }
+}
+
+################################################################################
+
+################################################################################
+
+
+
 main <- function() {
   #kruskall_object()
   #kruskall_excerpt()
@@ -1065,6 +1343,8 @@ main <- function() {
   #kruskall_subjectEyesight()
   #kruskall_subjectLanguage()
   #kruskall_subjectInterest()
+  #kruskall_audioVisual()
+  kruskall_modificationObject()
 }
 
 main()

@@ -5,13 +5,6 @@
 # Date: 2022 Jan
 ################################################################################
 
-runtime_total <- sum(data_done$Runtime)/6 # In ms (/6 because 1 Trial = 6 Rows)
-runtime_total <- runtime_total / 1000     # In s
-runtime_total <- runtime_total / 60       # In m
-#runtime_total <- runtime_total / 60      # In h
-#runtime_total <- runtime_total / 24      # In d
-# Total runtime of entire study in minutes:
-runtime_total
 
 
 
@@ -63,12 +56,14 @@ data_item <- data_done %>% mutate(ItemNew = paste0(Excerpt, Object, Modification
   mutate(meanRank = mean(Rank)) %>%
   mutate(meanGrade = mean(Grade)) %>%
   mutate(varRank = var(Rank)) %>%
-  mutate(varGrade = var(Grade)) %>%
+  mutate(varGrade = var(Grade, na.rm=FALSE)) %>%
+  mutate(sdRank = sd(Rank)) %>%
+  mutate(sdGrade = sd(Grade)) %>%
   mutate(number = n())# %>%
   #select(ItemNew, Excerpt, Object, Modification, Attribute, meanRank, varRank, meanGrade, varGrade)
 
 data_item <- data_item %>% distinct(ItemNew, .keep_all = TRUE) %>%
-  select(ItemNew, Excerpt, Object, Modification, Attribute, meanRank, varRank, meanGrade, varGrade, number)
+  select(ItemNew, Excerpt, Object, Modification, Attribute, meanRank, varRank, sdRank, meanGrade, varGrade, sdGrade, number)
 
 # From tibble to data.frame for printing more than 90 observations into sink
 data_item <- as.data.frame(data_item)
@@ -84,7 +79,7 @@ data_item$Attribute <- as.factor(data_item$Attribute)
 data_item <- data_item[order(data_item$Excerpt, data_item$Object, data_item$Modification, data_item$Attribute),] 
 
 identifier <- "tendency-all"
-sink_path <- paste0("listening_panel_rank/", identifier, "-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
 sink(sink_path)
 data_item
 sink()
@@ -92,7 +87,7 @@ sink()
 data_item <- data_item[order(data_item$number, data_item$Excerpt, data_item$Object, data_item$Modification, data_item$Attribute),] 
 
 identifier <- "tendency-all"
-sink_path <- paste0("listening_panel_rank/", identifier, "ordered-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "ordered-sink.txt")
 sink(sink_path)
 data_item
 sink()
@@ -105,7 +100,9 @@ data_item <- data_done %>% mutate(ItemNew = paste0(Excerpt, Object, Modification
   mutate(meanRank = mean(Rank)) %>%
   mutate(meanGrade = mean(Grade)) %>%
   mutate(varRank = var(Rank)) %>%
-  mutate(varGrade = var(Grade))
+  mutate(varGrade = var(Grade)) %>%
+  mutate(sdRank = sd(Rank)) %>%
+  mutate(sdGrade = sd(Grade))
 
 # How far did every subjects rating vary from the meanRating of the listening panel:
 data_item <- data_item %>% 
@@ -140,7 +137,7 @@ data_item <- data_item[order(data_item$meanRankDistanceMean),]
 data_item <- as.data.frame(data_item)
 
 identifier <- "all_subjects"
-sink_path <- paste0("listening_panel_rank/", identifier, "-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
 sink(sink_path)
 data_item
 sink()
@@ -158,11 +155,13 @@ data_item <- data_done %>% dplyr::filter(Study == "Blue") %>%
   mutate(meanGrade = mean(Grade)) %>%
   mutate(varRank = var(Rank)) %>%
   mutate(varGrade = var(Grade)) %>%
+  mutate(sdRank = sd(Rank)) %>%
+  mutate(sdGrade = sd(Grade)) %>%
   mutate(number = n())# %>%
 #select(ItemNew, Excerpt, Object, Modification, Attribute, meanRank, varRank, meanGrade, varGrade)
 
 data_item <- data_item %>% distinct(ItemNew, .keep_all = TRUE) %>%
-  select(ItemNew, Excerpt, Object, Modification, Attribute, meanRank, varRank, meanGrade, varGrade, number)
+  select(ItemNew, Excerpt, Object, Modification, Attribute, meanRank, varRank, sdRank, meanGrade, varGrade, sdGrade, number)
 
 # From tibble to data.frame for printing more than 90 observations into sink
 data_item <- as.data.frame(data_item)
@@ -180,7 +179,7 @@ data_item <- data_item[order(data_item$Excerpt, data_item$Object, data_item$Modi
 #data_item$ItemNew <- factor(data_item_shadow$ItemNew, levels = data_item_shadow$ItemNew[order(data_item_shadow$meanRank)])
 
 identifier <- "blue"
-sink_path <- paste0("listening_panel_rank/", identifier, "-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
 sink(sink_path)
 data_item
 sink()
@@ -195,7 +194,9 @@ data_item <- data_done %>% dplyr::filter(Study == "Blue") %>%
   mutate(meanRank = mean(Rank)) %>%
   mutate(meanGrade = mean(Grade)) %>%
   mutate(varRank = var(Rank)) %>%
-  mutate(varGrade = var(Grade))
+  mutate(varGrade = var(Grade)) %>%
+  mutate(sdRank = sd(Rank)) %>%
+  mutate(sdGrade = sd(Grade))
 
 # How far did every subjects rating vary from the meanRating of the listening panel:
 data_item <- data_item %>% 
@@ -230,7 +231,7 @@ data_item <- data_item[order(data_item$meanRankDistanceMean),]
 data_item <- as.data.frame(data_item)
 
 identifier <- "blue_subjects"
-sink_path <- paste0("listening_panel_rank/", identifier, "-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
 sink(sink_path)
 data_item
 sink()
@@ -276,7 +277,7 @@ sink()
 data_item <- as.data.frame(data_item)
 
 identifier <- "blue"
-sink_path <- paste0("listening_panel_rank/", identifier, "-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
 sink(sink_path)
 data_item
 sink()
@@ -320,7 +321,7 @@ data_item <- data_item %>% distinct(SubjectName, .keep_all = TRUE) %>%
 data_item <- as.data.frame(data_item)
 
 identifier <- "blue_subjects"
-sink_path <- paste0("listening_panel_rank/", identifier, "-sink.txt")
+sink_path <- paste0("listeningpanel-quali/", identifier, "-sink.txt")
 sink(sink_path)
 data_item
 sink()
